@@ -6,31 +6,88 @@
 }
 
 body {
-  background: #f4f6f8;
-  color: #222;
+  background: #050b18;
+  color: white;
 }
 
-.header {
-  background: #0a2540;
-  color: #fff;
-  padding: 40px 20px;
+/* Header */
+
+header {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 40px;
+  align-items: center;
+}
+
+header h1 {
+  color: #00aaff;
+}
+
+nav a {
+  margin-left: 20px;
+  text-decoration: none;
+  color: white;
+}
+
+.btn {
+  background: #00aaff;
+  padding: 10px 18px;
+  border-radius: 6px;
+  color: white;
+}
+
+.btn-outline {
+  border: 1px solid #00aaff;
+  padding: 10px 18px;
+  border-radius: 6px;
+  color: #00aaff;
+}
+
+/* Hero */
+
+.hero {
   text-align: center;
+  padding: 80px 20px;
 }
 
-.container {
+.tag {
+  background: #0a1b33;
+  padding: 6px 14px;
+  border-radius: 20px;
+  color: #00aaff;
+}
+
+.hero h2 {
+  font-size: 36px;
+  margin: 20px 0;
+}
+
+.hero span {
+  color: #00aaff;
+}
+
+.hero p {
+  max-width: 500px;
+  margin: auto;
+  opacity: 0.8;
+}
+
+.buttons {
+  margin-top: 30px;
+}
+
+/* Cards */
+
+.cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
   gap: 20px;
-  padding: 30px;
+  padding: 40px;
 }
 
 .card {
-  background: #fff;
-  padding: 20px;
+  background: #081428;
+  padding: 25px;
   border-radius: 12px;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.08);
-}
-
-.card h2 {
-  margin-bottom: 10px;
+  text-align: center;
 }
