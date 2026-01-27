@@ -1,1 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastro - NexaScore</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<h2 style="text-align:center; margin-top:50px">Cadastro</h2>
+
+<form class="form">
+
+  <input type="text" placeholder="Nome">
+  <input type="email" placeholder="Email">
+  <input type="password" placeholder="Senha">
+
+  <button class="btn">Cadastrar</button>
+
+</form>
+
+</body>
+</html>
 
