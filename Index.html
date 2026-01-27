@@ -1,64 +1,134 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>NexaScore</title>
-  <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8">
+<title>Funcionário Digital B2B</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background:#f2f2f2;
+}
+header {
+    background:#111;
+    color:white;
+    padding:15px;
+    text-align:center;
+}
+nav {
+    width:220px;
+    background:#222;
+    height:100vh;
+    position:fixed;
+    color:white;
+}
+nav button {
+    width:100%;
+    padding:12px;
+    background:none;
+    color:white;
+    border:none;
+    text-align:left;
+    cursor:pointer;
+}
+nav button:hover {
+    background:#444;
+}
+main {
+    margin-left:220px;
+    padding:20px;
+}
+.card {
+    background:white;
+    padding:15px;
+    border-radius:8px;
+    margin-bottom:15px;
+}
+.hidden {
+    display:none;
+}
+</style>
 </head>
 
 <body>
 
 <header>
-  <h1>NexaScore</h1>
-
-  <nav>
-    <a href="index.html">Início</a>
-    <a href="login.html">Entrar</a>
-    <a href="register.html" class="btn">Começar Grátis</a>
-  </nav>
+<h2>Funcionário Digital Corporativo</h2>
 </header>
 
-<section class="hero">
+<nav>
+<button onclick="show('dashboard')">📊 Dashboard</button>
+<button onclick="show('tickets')">🎫 Tickets</button>
+<button onclick="show('clientes')">👥 Clientes</button>
+<button onclick="show('contratos')">📄 Contratos</button>
+<button onclick="show('financas')">💰 Finanças</button>
+<button onclick="show('config')">⚙️ Configurações</button>
+</nav>
 
-  <span class="tag">
-    Performance, segurança e gestão em um só lugar
-  </span>
+<main>
 
-  <h2>
-    Gerencie sua empresa com
-    <span>inteligência</span>
-  </h2>
+<div id="dashboard" class="card">
+<h3>Dashboard</h3>
+<p>Lucro: R$ 0</p>
+<p>Gastos: R$ 0</p>
+<p>Contratos: 0</p>
+<p>Clientes: 0</p>
+<p>Tickets abertos: 0</p>
+</div>
 
-  <p>
-    A plataforma completa para clientes, contratos,
-    financeiro e atendimento.
-  </p>
+<div id="tickets" class="card hidden">
+<h3>Tickets</h3>
+<ul>
+<li>Ticket #001 - Aguardando atendente</li>
+<li>Ticket #002 - Em atendimento</li>
+</ul>
+</div>
 
-  <div class="buttons">
-    <a href="register.html" class="btn">Começar</a>
-    <a href="login.html" class="btn-outline">Entrar</a>
-  </div>
+<div id="clientes" class="card hidden">
+<h3>Clientes</h3>
+<ul>
+<li>Empresa X - Valor gerado: R$ 5000</li>
+<li>Empresa Y - Valor gerado: R$ 1200</li>
+</ul>
+</div>
 
-</section>
+<div id="contratos" class="card hidden">
+<h3>Contratos</h3>
+<ul>
+<li>Contrato A - Risco médio</li>
+<li>Contrato B - Risco baixo</li>
+</ul>
+</div>
 
-<section class="cards">
+<div id="financas" class="card hidden">
+<h3>Finanças</h3>
+<p>Receitas: R$ 0</p>
+<p>Despesas: R$ 0</p>
+<p>Lucro: R$ 0</p>
+</div>
 
-  <div class="card">
-    <h3>Clientes</h3>
-    <p>Gestão inteligente.</p>
-  </div>
+<div id="config" class="card hidden">
+<h3>Configurações</h3>
+<p>Nome da empresa:</p>
+<input placeholder="Nome da empresa"><br><br>
+<p>Responsável:</p>
+<input placeholder="Responsável"><br><br>
+<p>WhatsApp vinculado:</p>
+<input placeholder="Número WhatsApp"><br><br>
+<button>Salvar</button>
+</div>
 
-  <div class="card">
-    <h3>Contratos</h3>
-    <p>Análise automática.</p>
-  </div>
+</main>
 
-  <div class="card">
-    <h3>Financeiro</h3>
-    <p>Controle total.</p>
-  </div>
-
-</section>
+<script>
+function show(id){
+    let sections = ["dashboard","tickets","clientes","contratos","financas","config"];
+    sections.forEach(s=>{
+        document.getElementById(s).classList.add("hidden");
+    });
+    document.getElementById(id).classList.remove("hidden");
+}
+</script>
 
 </body>
 </html>
