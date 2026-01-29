@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrar | NexaScore</title>
+    <style>
+        :root { --bg: #0f172a; --card: #1e293b; --primary: #3b82f6; --text: #f8fafc; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card { background: var(--card); padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); width: 100%; max-width: 380px; border: 1px solid #334155; text-align: center; }
+        .logo { font-size: 24px; font-weight: bold; color: var(--primary); margin-bottom: 20px; display: block; text-decoration: none; }
+        h2 { margin-bottom: 10px; font-size: 20px; }
+        p { color: #94a3b8; font-size: 14px; margin-bottom: 30px; }
+        input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; outline: none; }
+        input:focus { border-color: var(--primary); }
+        .btn { width: 100%; padding: 12px; background: var(--primary); border: none; color: white; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        .footer { margin-top: 25px; font-size: 14px; color: #94a3b8; }
+        .footer a { color: var(--primary); text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <a href="index.html" class="logo">NEXASCORE</a>
+        <h2>Bem-vindo de volta</h2>
+        <p>Acesse sua conta para gerenciar seus resultados</p>
+        
+        <input type="email" id="login-email" placeholder="Seu e-mail">
+        <input type="password" id="login-password" placeholder="Sua senha">
+
+        <button class="btn" onclick="entrar()">Acessar Painel</button>
+        
+        <div class="footer">
+            Ainda não tem conta? <a href="registro.html">Começar agora</a>
+        </div>
+    </div>
+
+    <script>
+        function entrar() {
+            const email = document.getElementById('login-email').value;
+            if(!email) {
+                alert("Digite seu e-mail para acessar.");
+                return;
+            }
+            // Aqui conectaremos a verificação de segurança do Firebase
+            alert("Verificando credenciais de " + email + "...");
+            // Por enquanto, redireciona para o index para teste
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>
