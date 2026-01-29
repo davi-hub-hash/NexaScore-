@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -10,14 +10,12 @@
             --bg: #0f172a; 
             --card: #1e293b; 
             --primary: #3b82f6; 
-            --accent: #2dd4bf;
             --text: #f8fafc; 
         }
         
         * { box-sizing: border-box; scroll-behavior: smooth; }
         body { font-family: 'Inter', sans-serif; margin: 0; background: var(--bg); color: var(--text); line-height: 1.6; }
         
-        /* Menu de Navegação */
         nav { 
             display: flex; justify-content: space-between; align-items: center; 
             padding: 15px 8%; background: rgba(15, 23, 42, 0.9); 
@@ -26,28 +24,23 @@
         }
         .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary); letter-spacing: -1px; }
         .nav-links a { color: var(--text); text-decoration: none; margin-left: 20px; font-size: 0.9rem; transition: 0.3s; }
-        .nav-links a:hover { color: var(--primary); }
-        .btn-nav { background: var(--primary); padding: 8px 20px; border-radius: 6px; font-weight: 600; }
+        
+        .btn-nav { background: var(--primary); color: white; padding: 8px 20px; border-radius: 6px; font-weight: 600; text-decoration: none; }
 
-        /* Hero Section */
         header { padding: 100px 8% 60px; text-align: center; background: radial-gradient(circle at top right, #1e293b, #0f172a); }
         header h1 { font-size: 3rem; margin-bottom: 20px; background: linear-gradient(to right, #fff, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         header p { font-size: 1.2rem; color: #94a3b8; max-width: 700px; margin: 0 auto 40px; }
 
-        /* Serviços / O que fazemos */
         .features { padding: 80px 8%; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
-        .feature-card { background: var(--card); padding: 30px; border-radius: 15px; border: 1px solid #334155; transition: 0.3s; }
-        .feature-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+        .feature-card { background: var(--card); padding: 30px; border-radius: 15px; border: 1px solid #334155; text-align: center; }
         .feature-card i { font-size: 2rem; color: var(--primary); margin-bottom: 15px; }
-        .feature-card h3 { margin-bottom: 10px; }
 
-        /* Planos */
         .pricing { padding: 80px 8%; text-align: center; background: #0b1120; }
         .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 50px; }
-        .plan { background: var(--card); padding: 40px; border-radius: 20px; border: 1px solid #334155; position: relative; }
-        .plan.featured { border: 2px solid var(--primary); transform: scale(1.05); z-index: 10; }
+        .plan { background: var(--card); padding: 40px; border-radius: 20px; border: 1px solid #334155; }
+        .plan.featured { border: 2px solid var(--primary); transform: scale(1.05); }
         .price { font-size: 2.8rem; font-weight: bold; margin: 20px 0; }
-        .price span { font-size: 1rem; color: #94a3b8; }
+        
         .btn-plan { display: block; background: var(--primary); color: white; padding: 15px; border-radius: 10px; text-decoration: none; font-weight: bold; margin-top: 30px; }
 
         footer { padding: 40px 8%; text-align: center; border-top: 1px solid #334155; color: #64748b; font-size: 0.9rem; }
@@ -66,59 +59,55 @@
     </nav>
 
     <header>
-        <h1>Sua empresa em outro nível com IA</h1>
-        <p>A NexaScore automatiza seu financeiro, gere seus contratos e organiza seus clientes em uma plataforma única e ultra-segura.</p>
-        <a href="#planos" class="btn-nav" style="padding: 15px 40px; font-size: 1.1rem; text-decoration: none;">Começar Agora</a>
+        <h1>Gestão Inteligente com IA</h1>
+        <p>Automatize seu financeiro e gerencie contratos com a segurança que sua empresa merece.</p>
+        <a href="registro.html" class="btn-nav" style="padding: 15px 40px; font-size: 1.1rem;">Criar Conta Grátis</a>
     </header>
 
     <section id="funcionalidades" class="features">
         <div class="feature-card">
             <i class="fas fa-chart-line"></i>
             <h3>Dashboard Financeiro</h3>
-            <p>Visualize lucros, gastos e previsões em tempo real com gráficos inteligentes.</p>
+            <p>Controle de fluxo de caixa e métricas em tempo real.</p>
         </div>
         <div class="feature-card">
             <i class="fas fa-file-contract"></i>
-            <h3>Gestão de Contratos</h3>
-            <p>Armazene e assine documentos digitalmente com segurança criptografada.</p>
+            <h3>Contratos</h3>
+            <p>Gestão de documentos e assinaturas digitais.</p>
         </div>
         <div class="feature-card">
-            <i class="fas fa-users"></i>
-            <h3>CRM de Clientes</h3>
-            <p>Histórico completo de interações e funil de vendas automatizado.</p>
+            <i class="fas fa-shield-alt"></i>
+            <h3>Segurança Nexa</h3>
+            <p>Dados protegidos com criptografia de ponta a ponta.</p>
         </div>
     </section>
 
     <section class="pricing" id="planos">
-        <h2>Planos e Preços</h2>
+        <h2>Nossos Planos</h2>
         <div class="pricing-grid">
-            
             <div class="plan">
                 <h3>Inicial</h3>
                 <div class="price">R$ 49<span>/mês</span></div>
-                <p>Para quem está começando.</p>
-                <a href="https://www.asaas.com/c/kxtsfuxh82a712gz" target="_blank" class="btn-plan">Assinar Plano</a>
+                <p>Ideal para autônomos.</p>
+                <a href="registro.html" class="btn-plan">Começar Agora</a>
             </div>
-
             <div class="plan featured">
                 <h3>Profissional</h3>
                 <div class="price">R$ 99<span>/mês</span></div>
-                <p>O melhor custo-benefício.</p>
-                <a href="https://www.asaas.com/c/t96vgp34o23iwfgy" target="_blank" class="btn-plan">Assinar Plano</a>
+                <p>O poder da automação.</p>
+                <a href="registro.html" class="btn-plan">Começar Agora</a>
             </div>
-
             <div class="plan">
                 <h3>Premium</h3>
                 <div class="price">R$ 149<span>/mês</span></div>
-                <p>Recursos ilimitados e IA.</p>
-                <a href="https://www.asaas.com/c/jmhrxt3t2zrytxq6" target="_blank" class="btn-plan">Assinar Plano</a>
+                <p>Foco em escala e IA.</p>
+                <a href="registro.html" class="btn-plan">Começar Agora</a>
             </div>
-
         </div>
     </section>
 
     <footer>
-        &copy; 2026 NexaScore - Inteligência em Gestão Empresarial.
+        &copy; 2026 NexaScore - Inteligência Empresarial.
     </footer>
 
 </body>
