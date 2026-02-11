@@ -1,128 +1,63 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Configuração NexaScore Global</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root { --bg: #0f172a; --card: #1e293b; --primary: #3b82f6; --text: #f8fafc; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        
-        .onboarding-container { background: var(--card); padding: 40px; border-radius: 20px; width: 100%; max-width: 600px; border: 1px solid #334155; }
-        .step { display: none; }
-        .step.active { display: block; animation: fadeIn 0.5s ease; }
-        
-        h2 { color: var(--primary); margin-bottom: 10px; }
-        p { color: #94a3b8; margin-bottom: 30px; }
+                <script type="module">
+    import { auth, db } from './firebase-config.js';
+    import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        /* Seleção de País */
-        .country-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 30px; }
-        .country-card { background: #0f172a; border: 2px solid #334155; padding: 20px; border-radius: 12px; text-align: center; cursor: pointer; transition: 0.3s; }
-        .country-card:hover { border-color: var(--primary); }
-        .country-card.selected { border-color: var(--primary); background: rgba(59, 130, 246, 0.1); }
-        .country-card i { font-size: 2rem; margin-bottom: 10px; display: block; }
+    let config = { country: '', currency: '', name: '' };
+    let currentUser = null;
 
-        /* Formulário */
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-size: 14px; color: #cbd5e1; }
-        input, select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; outline: none; }
-        
-        .btn-next { width: 100%; padding: 15px; background: var(--primary); border: none; color: white; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 20px; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
-</head>
-<body>
-
-    <div class="onboarding-container">
-        <div class="step active" id="step1">
-            <h2>Bem-vindo à NexaScore Global</h2>
-            <p>Primeiro, selecione a região de operação da sua empresa:</p>
-            
-            <div class="country-grid">
-                <div class="country-card" onclick="selectCountry('BR', 'R$', 'Brasil')">
-                    <i class="fas fa-globe-americas"></i>
-                    <span>Brasil</span>
-                </div>
-                <div class="country-card" onclick="selectCountry('US', '$', 'EUA')">
-                    <i class="fas fa-flag-usa"></i>
-                    <span>EUA</span>
-                </div>
-                <div class="country-card" onclick="selectCountry('EU', '€', 'Europa')">
-                    <i class="fas fa-landmark"></i>
-                    <span>Europa</span>
-                </div>
-            </div>
-            <button class="btn-next" onclick="nextStep(2)">Continuar</button>
-        </div>
-
-        <div class="step" id="step2">
-            <h2>Configuração Empresarial</h2>
-            <p>Preencha os dados oficiais para automação fiscal.</p>
-            
-            <div class="form-group">
-                <label id="doc-label">CNPJ / Identificação Fiscal</label>
-                <input type="text" id="tax-id" placeholder="00.000.000/0001-00">
-            </div>
-
-            <div class="form-group">
-                <label>Setor de Atuação</label>
-                <select id="sector">
-                    <option value="tech">Tecnologia / SaaS</option>
-                    <option value="service">Serviços</option>
-                    <option value="retail">Varejo / E-commerce</option>
-                    <option value="industry">Indústria</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Possui equipe comercial?</label>
-                <select id="has-sales">
-                    <option value="yes">Sim</option>
-                    <option value="no">Não</option>
-                </select>
-            </div>
-
-            <button class="btn-next" onclick="finishOnboarding()">Finalizar e Abrir Dashboard</button>
-        </div>
-    </div>
-
-    <script>
-        let config = { country: '', currency: '', name: '' };
-
-        function selectCountry(code, symbol, name) {
-            config.country = code;
-            config.currency = symbol;
-            config.name = name;
-            
-            // Estilização visual
-            document.querySelectorAll('.country-card').forEach(c => c.classList.remove('selected'));
-            event.currentTarget.classList.add('selected');
-
-            // Ajusta o label conforme o país
-            const docLabel = document.getElementById('doc-label');
-            if(code === 'US') docLabel.innerText = "EIN (Employer Identification Number)";
-            else if(code === 'EU') docLabel.innerText = "VAT Number";
-            else docLabel.innerText = "CNPJ";
+    // Verifica se o usuário está logado
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            currentUser = user;
+        } else {
+            // Se não estiver logado, manda para o registro
+            window.location.href = "registro.html";
         }
+    });
 
-        function nextStep(step) {
-            if(!config.country) return alert("Selecione um país primeiro.");
-            document.getElementById('step1').classList.remove('active');
-            document.getElementById('step2').classList.add('active');
-        }
+    window.selectCountry = function(code, symbol, name) {
+        config.country = code;
+        config.currency = symbol;
+        config.name = name;
+        
+        document.querySelectorAll('.country-card').forEach(c => c.classList.remove('selected'));
+        event.currentTarget.classList.add('selected');
 
-        function finishOnboarding() {
-            const taxId = document.getElementById('tax-id').value;
-            if(!taxId) return alert("Preencha a identificação fiscal.");
+        const docLabel = document.getElementById('doc-label');
+        if(code === 'US') docLabel.innerText = "EIN (Employer Identification Number)";
+        else if(code === 'EU') docLabel.innerText = "VAT Number";
+        else docLabel.innerText = "CNPJ";
+    }
 
-            // Aqui o NexaEngine salva os dados no Firebase
-            console.log("Configuração Finalizada:", config);
-            
-            alert("NexaEngine configurado para " + config.name + "! Redirecionando...");
+    window.nextStep = function(step) {
+        if(!config.country) return alert("Selecione um país primeiro.");
+        document.getElementById('step1').classList.remove('active');
+        document.getElementById('step2').classList.add('active');
+    }
+
+    window.finishOnboarding = async function() {
+        const taxId = document.getElementById('tax-id').value;
+        const sector = document.getElementById('sector').value;
+
+        if(!taxId) return alert("Preencha a identificação fiscal.");
+
+        try {
+            // SALVANDO NO FIREBASE (NexaEngine em ação)
+            await setDoc(doc(db, "empresas", currentUser.uid), {
+                pais: config.name,
+                moeda: config.currency,
+                identificacaoFiscal: taxId,
+                setor: sector,
+                configurado: true,
+                dataConfig: new Date()
+            });
+
+            alert("Configuração Global salva com sucesso!");
             window.location.href = "dashboard.html";
+        } catch (e) {
+            console.error("Erro ao salvar: ", e);
+            alert("Erro ao salvar configuração.");
         }
-    </script>
-</body>
-</html>
+    }
+                </script>
