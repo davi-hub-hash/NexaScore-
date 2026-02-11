@@ -1,63 +1,232 @@
-                <script type="module">
-    import { auth, db } from './firebase-config.js';
-    import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-    let config = { country: '', currency: '', name: '' };
-    let currentUser = null;
-
-    // Verifica se o usuário está logado
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            currentUser = user;
-        } else {
-            // Se não estiver logado, manda para o registro
-            window.location.href = "registro.html";
+                <!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Onboarding Inteligente | NexaScore Global</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { 
+            --bg: #0f172a; 
+            --card: #1e293b; 
+            --primary: #3b82f6; 
+            --text: #f8fafc; 
+            --border: #334155;
         }
-    });
-
-    window.selectCountry = function(code, symbol, name) {
-        config.country = code;
-        config.currency = symbol;
-        config.name = name;
         
-        document.querySelectorAll('.country-card').forEach(c => c.classList.remove('selected'));
-        event.currentTarget.classList.add('selected');
-
-        const docLabel = document.getElementById('doc-label');
-        if(code === 'US') docLabel.innerText = "EIN (Employer Identification Number)";
-        else if(code === 'EU') docLabel.innerText = "VAT Number";
-        else docLabel.innerText = "CNPJ";
-    }
-
-    window.nextStep = function(step) {
-        if(!config.country) return alert("Selecione um país primeiro.");
-        document.getElementById('step1').classList.remove('active');
-        document.getElementById('step2').classList.add('active');
-    }
-
-    window.finishOnboarding = async function() {
-        const taxId = document.getElementById('tax-id').value;
-        const sector = document.getElementById('sector').value;
-
-        if(!taxId) return alert("Preencha a identificação fiscal.");
-
-        try {
-            // SALVANDO NO FIREBASE (NexaEngine em ação)
-            await setDoc(doc(db, "empresas", currentUser.uid), {
-                pais: config.name,
-                moeda: config.currency,
-                identificacaoFiscal: taxId,
-                setor: sector,
-                configurado: true,
-                dataConfig: new Date()
-            });
-
-            alert("Configuração Global salva com sucesso!");
-            window.location.href = "dashboard.html";
-        } catch (e) {
-            console.error("Erro ao salvar: ", e);
-            alert("Erro ao salvar configuração.");
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
         }
-    }
-                </script>
+        
+        .onboarding-container { 
+            background: var(--card); 
+            padding: 40px; 
+            border-radius: 20px; 
+            width: 90%; 
+            max-width: 550px; 
+            border: 1px solid var(--border); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .step { display: none; }
+        .step.active { display: block; animation: fadeIn 0.4s ease-in-out; }
+        
+        h2 { color: var(--primary); margin-bottom: 10px; font-size: 1.5rem; }
+        p { color: #94a3b8; margin-bottom: 30px; font-size: 0.95rem; }
+
+        /* Grid de Países */
+        .country-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 15px; 
+            margin-bottom: 30px; 
+        }
+        
+        .country-card { 
+            background: #0f172a; 
+            border: 2px solid var(--border); 
+            padding: 20px; 
+            border-radius: 12px; 
+            text-align: center; 
+            cursor: pointer; 
+            transition: 0.3s; 
+        }
+        
+        .country-card:hover { border-color: var(--primary); transform: translateY(-3px); }
+        .country-card.selected { border-color: var(--primary); background: rgba(59, 130, 246, 0.1); }
+        .country-card i { font-size: 1.8rem; margin-bottom: 10px; display: block; color: var(--primary); }
+        .country-card span { font-size: 0.85rem; font-weight: 600; }
+
+        /* Formulário */
+        .form-group { margin-bottom: 20px; text-align: left; }
+        label { display: block; margin-bottom: 8px; font-size: 13px; color: #cbd5e1; font-weight: 500; }
+        input, select { 
+            width: 100%; 
+            padding: 12px; 
+            border-radius: 8px; 
+            border: 1px solid var(--border); 
+            background: #0f172a; 
+            color: white; 
+            outline: none; 
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2); }
+        
+        .btn-next { 
+            width: 100%; 
+            padding: 14px; 
+            background: var(--primary); 
+            border: none; 
+            color: white; 
+            border-radius: 8px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            margin-top: 10px; 
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+        .btn-next:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div class="onboarding-container">
+        <div class="step active" id="step1">
+            <h2>Bem-vindo à NexaScore Global</h2>
+            <p>Selecione a região de operação da sua empresa:</p>
+            
+            <div class="country-grid">
+                <div class="country-card" onclick="selectCountry('BR', 'R$', 'Brasil')">
+                    <i class="fas fa-globe-americas"></i>
+                    <span>Brasil</span>
+                </div>
+                <div class="country-card" onclick="selectCountry('US', '$', 'EUA')">
+                    <i class="fas fa-flag-usa"></i>
+                    <span>EUA</span>
+                </div>
+                <div class="country-card" onclick="selectCountry('EU', '€', 'Europa')">
+                    <i class="fas fa-landmark"></i>
+                    <span>Europa</span>
+                </div>
+            </div>
+            <button class="btn-next" onclick="nextStep(2)">Próximo Passo</button>
+        </div>
+
+        <div class="step" id="step2">
+            <h2>Dados da Empresa</h2>
+            <p>Configure a identidade fiscal para o NexaEngine.</p>
+            
+            <div class="form-group">
+                <label id="doc-label">CNPJ / Identificação Fiscal</label>
+                <input type="text" id="tax-id" placeholder="00.000.000/0001-00">
+            </div>
+
+            <div class="form-group">
+                <label>Setor de Atuação</label>
+                <select id="sector">
+                    <option value="tech">Tecnologia / SaaS</option>
+                    <option value="service">Prestação de Serviços</option>
+                    <option value="retail">Varejo / E-commerce</option>
+                    <option value="finance">Setor Financeiro</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Possui equipe comercial?</label>
+                <select id="has-sales">
+                    <option value="sim">Sim, temos vendedores</option>
+                    <option value="nao">Não, operação solo / automática</option>
+                </select>
+            </div>
+
+            <button class="btn-next" onclick="finishOnboarding()">Finalizar Configuração</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth, db } from './firebase-config.js';
+        import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        let config = { country: '', currency: '', name: '' };
+        let currentUser = null;
+
+        // Monitor de Autenticação
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+            } else {
+                // Se não estiver logado, redireciona para o login
+                window.location.href = "login.html";
+            }
+        });
+
+        // Seleção Visual de País
+        window.selectCountry = function(code, symbol, name) {
+            config.country = code;
+            config.currency = symbol;
+            config.name = name;
+            
+            document.querySelectorAll('.country-card').forEach(c => c.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+
+            const docLabel = document.getElementById('doc-label');
+            if(code === 'US') docLabel.innerText = "EIN (Employer Identification Number)";
+            else if(code === 'EU') docLabel.innerText = "VAT Number";
+            else docLabel.innerText = "CNPJ";
+        };
+
+        // Troca de Etapa
+        window.nextStep = function(step) {
+            if(!config.country) {
+                alert("Por favor, selecione um país primeiro.");
+                return;
+            }
+            document.getElementById('step1').classList.remove('active');
+            document.getElementById('step2').classList.add('active');
+        };
+
+        // Gravação Final no Firebase
+        window.finishOnboarding = async function() {
+            const taxId = document.getElementById('tax-id').value;
+            const sector = document.getElementById('sector').value;
+            const hasSales = document.getElementById('has-sales').value;
+
+            if(!taxId) {
+                alert("A identificação fiscal é obrigatória para o NexaEngine.");
+                return;
+            }
+
+            try {
+                // Criando registro oficial da empresa no Firestore
+                await setDoc(doc(db, "empresas", currentUser.uid), {
+                    userId: currentUser.uid,
+                    pais: config.name,
+                    moeda: config.currency,
+                    identificacaoFiscal: taxId,
+                    setor: sector,
+                    equipeComercial: hasSales,
+                    configurado: true,
+                    dataCriacao: new Date().toISOString()
+                });
+
+                alert("NexaEngine configurado com sucesso!");
+                window.location.href = "dashboard.html";
+            } catch (error) {
+                console.error("Erro NexaEngine: ", error);
+                alert("Erro ao salvar configuração. Verifique se o Firestore está em 'Modo de Teste'.");
+            }
+        };
+    </script>
+</body>
+</html>
