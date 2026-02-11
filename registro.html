@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Conta | NexaScore 3.0</title>
+    <style>
+        :root { --bg: #0f172a; --card: #1e293b; --primary: #3b82f6; --text: #f8fafc; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card { background: var(--card); padding: 40px; border-radius: 20px; width: 100%; max-width: 400px; border: 1px solid #334155; text-align: center; }
+        input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; }
+        .btn { width: 100%; padding: 12px; background: var(--primary); border: none; color: white; border-radius: 8px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>NexaScore Global</h2>
+        <p>Crie sua conta empresarial</p>
+        <input type="email" id="email" placeholder="E-mail">
+        <input type="password" id="password" placeholder="Senha (mín. 6 dígitos)">
+        <button class="btn" onclick="cadastrar()">Criar Conta</button>
+        <p style="font-size: 14px; margin-top: 20px;">Já tem conta? <a href="login.html" style="color: var(--primary);">Entrar</a></p>
+    </div>
+
+    <script type="module">
+        import { auth } from './firebase-config.js';
+        import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        window.cadastrar = async function() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            try {
+                await createUserWithEmailAndPassword(auth, email, password);
+                alert("Conta criada! Vamos configurar sua empresa.");
+                window.location.href = "onboarding.html";
+            } catch (error) {
+                alert("Erro: " + error.message);
+            }
+        }
+    </script>
+</body>
+</html>
