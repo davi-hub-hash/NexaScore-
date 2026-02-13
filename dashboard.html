@@ -1,203 +1,165 @@
-
-                <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexuScore - Dashboard</title>
+    <title>NexuScore - Dashboard Completo</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
         :root {
-            --bg-dark: #0f172a;
-            --sidebar-bg: #1e293b;
-            --accent: #3b82f6;
-            --text-gray: #94a3b8;
+            --sidebar-width-full: 260px;
+            --sidebar-width-collapsed: 70px;
+            --bg-color: #0b0f1a;
+            --sidebar-color: #161b22;
+            --accent-color: #00d2ff;
+            --text-color: #ffffff;
         }
 
         body {
             margin: 0;
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-dark);
-            color: white;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             display: flex;
-            overflow-x: hidden;
+            min-height: 100vh;
         }
 
-        /* SIDEBAR ACOPLADA (RETRÁTIL) */
+        /* BARRA LATERAL (SIDEBAR) */
         .sidebar {
-            width: 70px; /* Largura inicial reduzida */
+            width: var(--sidebar-width-collapsed);
+            background-color: var(--sidebar-color);
             height: 100vh;
-            background-color: var(--sidebar-bg);
-            display: flex;
-            flex-direction: column;
-            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: fixed;
             left: 0;
             top: 0;
+            display: flex;
+            flex-direction: column;
+            transition: width 0.3s ease;
             z-index: 1000;
-            border-right: 1px solid #334155;
-            overflow: hidden;
+            overflow: hidden; /* Esconde o conteúdo que sobra */
+            border-right: 1px solid #30363d;
         }
 
         /* Expandir ao passar o mouse */
         .sidebar:hover {
-            width: 240px;
+            width: var(--sidebar-width-full);
         }
 
-        .logo-area {
-            height: 70px;
+        /* Área do Logo / Topo */
+        .sidebar-header {
+            padding: 20px;
             display: flex;
             align-items: center;
-            padding: 0 23px;
-            color: var(--accent);
-            font-size: 24px;
-        }
-
-        .logo-text {
-            margin-left: 20px;
-            font-weight: bold;
-            opacity: 0;
-            transition: opacity 0.2s;
             white-space: nowrap;
         }
 
-        .sidebar:hover .logo-text {
+        .sidebar-header i {
+            font-size: 24px;
+            color: var(--accent-color);
+            min-width: 30px;
+        }
+
+        .sidebar-header span {
+            margin-left: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .sidebar:hover .sidebar-header span {
             opacity: 1;
         }
 
-        .menu-items {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 20px;
+        /* Itens do Menu */
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            width: 100%;
         }
 
         .nav-link {
             display: flex;
             align-items: center;
-            padding: 15px 25px;
-            color: var(--text-gray);
+            padding: 15px 23px;
+            color: #8b949e;
             text-decoration: none;
-            transition: all 0.2s;
-            cursor: pointer;
+            transition: 0.2s;
+            white-space: nowrap;
+        }
+
+        .nav-link:hover {
+            background-color: #21262d;
+            color: var(--accent-color);
         }
 
         .nav-link i {
             font-size: 20px;
-            min-width: 25px;
+            min-width: 30px;
+            text-align: center;
         }
 
         .nav-link span {
-            margin-left: 20px;
+            margin-left: 15px;
             opacity: 0;
-            transition: opacity 0.2s;
-            white-space: nowrap;
+            transition: opacity 0.3s;
         }
 
         .sidebar:hover .nav-link span {
             opacity: 1;
         }
 
-        .nav-link:hover {
-            background: rgba(59, 130, 246, 0.1);
-            color: var(--accent);
-        }
-
-        /* CONTEÚDO PRINCIPAL */
+        /* CONTEÚDO PRINCIPAL (MAIN) */
         .main-content {
-            margin-left: 70px; /* Espaço da barra fina */
+            margin-left: var(--sidebar-width-collapsed); /* Deixa espaço fixo para a barra pequena */
             flex-grow: 1;
-            padding: 40px;
+            padding: 30px;
             transition: margin-left 0.3s ease;
-            width: 100%;
+            width: calc(100% - var(--sidebar-width-collapsed));
         }
 
-        /* Empurra o conteúdo quando a barra expande */
-        /* Remova a linha abaixo se quiser que a barra sobreponha o conteúdo */
-        /* .sidebar:hover ~ .main-content { margin-left: 240px; } */
-
-        .header {
-            margin-bottom: 30px;
+        /* Opcional: Empurrar o conteúdo quando a barra abrir */
+        .sidebar:hover ~ .main-content {
+            margin-left: var(--sidebar-width-full);
+            width: calc(100% - var(--sidebar-width-full));
         }
 
-        .card-grid {
+        /* Seus cards e outros elementos aqui embaixo */
+        .dashboard-header { margin-bottom: 30px; }
+        .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
         }
-
-        .card {
-            background: var(--sidebar-bg);
-            padding: 25px;
-            border-radius: 12px;
-            border: 1px solid #334155;
+        .stat-card {
+            background: #21262d;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #30363d;
         }
-
-        .card h3 { margin: 0; color: var(--text-gray); font-size: 14px; }
-        .card p { font-size: 28px; font-weight: bold; margin: 10px 0 0 0; }
     </style>
 </head>
 <body>
 
-    <nav class="sidebar">
-        <div class="logo-area">
-            <i class="fas fa-bolt"></i>
-            <span class="logo-text">NexuScore</span>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-layer-group"></i>
+            <span>NexaScore 3.0</span>
         </div>
-        
-        <div class="menu-items">
-            <a class="nav-link" onclick="console.log('Home')">
-                <i class="fas fa-home"></i>
-                <span>Visão Geral</span>
-            </a>
-            <a class="nav-link" onclick="console.log('Financeiro')">
-                <i class="fas fa-chart-pie"></i>
-                <span>Financeiro</span>
-            </a>
-            <a class="nav-link" onclick="console.log('Config')">
-                <i class="fas fa-cog"></i>
-                <span>Configurações</span>
-            </a>
-            <a class="nav-link" href="index.html" style="margin-top: auto; color: #ef4444;">
-                <i class="fas fa-sign-out-alt"></i>
-                <span>Sair</span>
-            </a>
-        </div>
-    </nav>
 
-    <main class="main-content">
-        <header class="header">
-            <h1>Bem-vindo ao Dashboard</h1>
-            <p style="color: var(--text-gray)">Aqui está o resumo da sua operação hoje.</p>
-        </header>
-
-        <section class="card-grid">
-            <div class="card">
-                <h3>Pontuação Nexu</h3>
-                <p>850</p>
-            </div>
-            <div class="card">
-                <h3>Vendas Hoje</h3>
-                <p>R$ 12.450</p>
-            </div>
-            <div class="card">
-                <h3>Novos Clientes</h3>
-                <p>12</p>
-            </div>
-        </section>
-    </main>
-
-    <script type="module">
-        import { auth } from './firebase-config.js';
-        
-        // Verifica se o usuário está logado ao carregar
-        auth.onAuthStateChanged(user => {
-            if (!user) {
-                window.location.href = 'index.html'; // Expulsa se não estiver logado
-            } else {
-                console.log("Usuário logado:", user.email);
-            }
-        });
-    </script>
-</body>
-</html>                       </html>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Início</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#"      
