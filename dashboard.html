@@ -1,115 +1,203 @@
-<!DOCTYPE html>
+
+                <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | NexaScore Global 3.0</title>
+    <title>NexuScore - Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root { --bg: #0b0f1a; --sidebar: #161b2c; --primary: #3b82f6; --text: #f8fafc; --success: #10b981; }
-        body { font-family: 'Inter', sans-serif; margin: 0; display: flex; background: var(--bg); color: var(--text); overflow: hidden; }
+        :root {
+            --bg-dark: #0f172a;
+            --sidebar-bg: #1e293b;
+            --accent: #3b82f6;
+            --text-gray: #94a3b8;
+        }
 
-        /* Menu Lateral */
-        nav { width: 260px; background: var(--sidebar); height: 100vh; padding: 20px; border-right: 1px solid #2d3748; display: flex; flex-direction: column; }
-        .logo { font-size: 1.4rem; font-weight: 800; color: var(--primary); margin-bottom: 40px; text-align: center; }
-        
-        .nav-item { display: flex; align-items: center; padding: 12px 15px; color: #94a3b8; text-decoration: none; border-radius: 8px; margin-bottom: 5px; transition: 0.3s; font-size: 0.9rem; }
-        .nav-item:hover, .nav-item.active { background: rgba(59, 130, 246, 0.1); color: var(--primary); }
-        .nav-item i { margin-right: 12px; width: 20px; text-align: center; }
-        
-        .status-engine { margin-top: auto; background: rgba(16, 185, 129, 0.1); padding: 15px; border-radius: 10px; border: 1px solid rgba(16, 185, 129, 0.3); }
-        .status-engine span { display: block; font-size: 11px; color: var(--success); font-weight: bold; }
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: white;
+            display: flex;
+            overflow-x: hidden;
+        }
 
-        /* Área Principal */
-        main { flex: 1; padding: 30px; overflow-y: auto; height: 100vh; }
-        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .stat-card { background: var(--sidebar); padding: 20px; border-radius: 12px; border: 1px solid #2d3748; }
-        .stat-card h4 { margin: 0; color: #94a3b8; font-size: 13px; text-transform: uppercase; }
-        .stat-card .value { font-size: 24px; font-weight: bold; margin-top: 10px; display: block; }
-        .stat-card .trend { font-size: 12px; color: var(--success); }
+        /* SIDEBAR ACOPLADA (RETRÁTIL) */
+        .sidebar {
+            width: 70px; /* Largura inicial reduzida */
+            height: 100vh;
+            background-color: var(--sidebar-bg);
+            display: flex;
+            flex-direction: column;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            border-right: 1px solid #334155;
+            overflow: hidden;
+        }
 
-        .chart-container { background: var(--sidebar); padding: 25px; border-radius: 15px; border: 1px solid #2d3748; margin-bottom: 30px; }
+        /* Expandir ao passar o mouse */
+        .sidebar:hover {
+            width: 240px;
+        }
+
+        .logo-area {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            padding: 0 23px;
+            color: var(--accent);
+            font-size: 24px;
+        }
+
+        .logo-text {
+            margin-left: 20px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.2s;
+            white-space: nowrap;
+        }
+
+        .sidebar:hover .logo-text {
+            opacity: 1;
+        }
+
+        .menu-items {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: var(--text-gray);
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-link i {
+            font-size: 20px;
+            min-width: 25px;
+        }
+
+        .nav-link span {
+            margin-left: 20px;
+            opacity: 0;
+            transition: opacity 0.2s;
+            white-space: nowrap;
+        }
+
+        .sidebar:hover .nav-link span {
+            opacity: 1;
+        }
+
+        .nav-link:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent);
+        }
+
+        /* CONTEÚDO PRINCIPAL */
+        .main-content {
+            margin-left: 70px; /* Espaço da barra fina */
+            flex-grow: 1;
+            padding: 40px;
+            transition: margin-left 0.3s ease;
+            width: 100%;
+        }
+
+        /* Empurra o conteúdo quando a barra expande */
+        /* Remova a linha abaixo se quiser que a barra sobreponha o conteúdo */
+        /* .sidebar:hover ~ .main-content { margin-left: 240px; } */
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--sidebar-bg);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+        }
+
+        .card h3 { margin: 0; color: var(--text-gray); font-size: 14px; }
+        .card p { font-size: 28px; font-weight: bold; margin: 10px 0 0 0; }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="logo">NEXASCORE 3.0</div>
+    <nav class="sidebar">
+        <div class="logo-area">
+            <i class="fas fa-bolt"></i>
+            <span class="logo-text">NexuScore</span>
+        </div>
         
-        <a href="#" class="nav-item active"><i class="fas fa-th-large"></i> Visão Geral</a>
-        <a href="#" class="nav-item"><i class="fas fa-university"></i> Extrato Bancário</a>
-        <a href="#" class="nav-item"><i class="fas fa-file-signature"></i> Contratos (IA)</a>
-        <a href="#" class="nav-item"><i class="fas fa-users"></i> Clientes & CRM</a>
-        <a href="#" class="nav-item"><i class="fas fa-user-tie"></i> Funcionários</a>
-        <a href="#" class="nav-item"><i class="fas fa-headset"></i> Atendimento</a>
-        <a href="#" class="nav-item"><i class="fas fa-cog"></i> NexaEngine</a>
-
-        <div class="status-engine">
-            <span><i class="fas fa-circle"></i> NexaEngine Ativo</span>
-            <small style="font-size: 10px; color: #94a3b8;">Sincronizando bancos...</small>
+        <div class="menu-items">
+            <a class="nav-link" onclick="console.log('Home')">
+                <i class="fas fa-home"></i>
+                <span>Visão Geral</span>
+            </a>
+            <a class="nav-link" onclick="console.log('Financeiro')">
+                <i class="fas fa-chart-pie"></i>
+                <span>Financeiro</span>
+            </a>
+            <a class="nav-link" onclick="console.log('Config')">
+                <i class="fas fa-cog"></i>
+                <span>Configurações</span>
+            </a>
+            <a class="nav-link" href="index.html" style="margin-top: auto; color: #ef4444;">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Sair</span>
+            </a>
         </div>
     </nav>
 
-    <main>
-        <div class="header-top">
-            <h2>Visão Geral do Negócio</h2>
-            <div class="user-info">
-                <span id="current-date" style="color: #94a3b8;"></span>
-            </div>
-        </div>
+    <main class="main-content">
+        <header class="header">
+            <h1>Bem-vindo ao Dashboard</h1>
+            <p style="color: var(--text-gray)">Aqui está o resumo da sua operação hoje.</p>
+        </header>
 
-        <div class="stats-grid">
-            <div class="stat-card">
-                <h4>Receita Total (Mensal)</h4>
-                <span class="value">R$ 124.500,00</span>
-                <span class="trend"><i class="fas fa-arrow-up"></i> +12% vs mês anterior</span>
+        <section class="card-grid">
+            <div class="card">
+                <h3>Pontuação Nexu</h3>
+                <p>850</p>
             </div>
-            <div class="stat-card">
-                <h4>Margem de Lucro</h4>
-                <span class="value">38.4%</span>
-                <span class="trend"><i class="fas fa-arrow-up"></i> +2.1%</span>
+            <div class="card">
+                <h3>Vendas Hoje</h3>
+                <p>R$ 12.450</p>
             </div>
-            <div class="stat-card">
-                <h4>Clientes em Atraso</h4>
-                <span class="value">03</span>
-                <span class="trend" style="color: #ef4444;"><i class="fas fa-exclamation-triangle"></i> Autocobrança ativa</span>
+            <div class="card">
+                <h3>Novos Clientes</h3>
+                <p>12</p>
             </div>
-            <div class="stat-card">
-                <h4>Score de Risco</h4>
-                <span class="value" style="color: var(--success);">BAIXO</span>
-                <span class="trend">Saúde financeira estável</span>
-            </div>
-        </div>
-
-        <div class="chart-container">
-            <canvas id="mainChart" height="100"></canvas>
-        </div>
+        </section>
     </main>
 
-    <script>
-        // Data atual
-        document.getElementById('current-date').innerText = new Date().toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' });
-
-        // Gráfico de Exemplo (Automatizado)
-        const ctx = document.getElementById('mainChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
-                datasets: [{
-                    label: 'Fluxo de Caixa (Real)',
-                    data: [12000, 19000, 15000, 25000, 22000, 30000],
-                    borderColor: '#3b82f6',
-                    tension: 0.4,
-                    fill: true,
-                    backgroundColor: 'rgba(59, 130, 246, 0.1)'
-                }]
-            },
-            options: { plugins: { legend: { display: false } }, scales: { y: { grid: { color: '#2d3748' } }, x: { grid: { display: false } } } }
+    <script type="module">
+        import { auth } from './firebase-config.js';
+        
+        // Verifica se o usuário está logado ao carregar
+        auth.onAuthStateChanged(user => {
+            if (!user) {
+                window.location.href = 'index.html'; // Expulsa se não estiver logado
+            } else {
+                console.log("Usuário logado:", user.email);
+            }
         });
     </script>
 </body>
-                                       </html>
+</html>                       </html>
