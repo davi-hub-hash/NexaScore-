@@ -3,30 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexuScore - Dashboard Completo</title>
+    <title>NexuScore 3.0 - Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
     <style>
         :root {
-            --sidebar-width-full: 260px;
+            --bg-body: #05070a;
+            --sidebar-color: #0d1117;
+            --accent: #00d2ff;
+            --text-primary: #ffffff;
+            --text-secondary: #8b949e;
             --sidebar-width-collapsed: 70px;
-            --bg-color: #0b0f1a;
-            --sidebar-color: #161b22;
-            --accent-color: #00d2ff;
-            --text-color: #ffffff;
+            --sidebar-width-expanded: 260px;
         }
 
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-primary);
             display: flex;
             min-height: 100vh;
         }
 
-        /* BARRA LATERAL (SIDEBAR) */
+        /* SIDEBAR ESTRUTURA NEXUSCORE 3.0 */
         .sidebar {
             width: var(--sidebar-width-collapsed);
             background-color: var(--sidebar-color);
@@ -36,45 +36,48 @@
             top: 0;
             display: flex;
             flex-direction: column;
-            transition: width 0.3s ease;
+            transition: width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 1000;
-            overflow: hidden; /* Esconde o conteúdo que sobra */
             border-right: 1px solid #30363d;
+            overflow: hidden;
         }
 
-        /* Expandir ao passar o mouse */
         .sidebar:hover {
-            width: var(--sidebar-width-full);
+            width: var(--sidebar-width-expanded);
         }
 
-        /* Área do Logo / Topo */
-        .sidebar-header {
-            padding: 20px;
+        /* LOGO */
+        .sidebar-brand {
+            height: 80px;
             display: flex;
             align-items: center;
-            white-space: nowrap;
+            padding: 0 20px;
+            background: linear-gradient(to right, #0d1117, #161b22);
         }
 
-        .sidebar-header i {
-            font-size: 24px;
-            color: var(--accent-color);
+        .sidebar-brand i {
+            font-size: 28px;
+            color: var(--accent);
             min-width: 30px;
+            text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
         }
 
-        .sidebar-header span {
-            margin-left: 15px;
-            font-size: 20px;
-            font-weight: bold;
+        .sidebar-brand span {
+            margin-left: 20px;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            white-space: nowrap;
             opacity: 0;
             transition: opacity 0.3s;
         }
 
-        .sidebar:hover .sidebar-header span {
+        .sidebar:hover .sidebar-brand span {
             opacity: 1;
         }
 
-        /* Itens do Menu */
-        .nav-menu {
+        /* MENU DE NAVEGAÇÃO */
+        .sidebar-nav {
             list-style: none;
             padding: 0;
             margin: 20px 0;
@@ -83,21 +86,23 @@
 
         .nav-item {
             width: 100%;
+            margin-bottom: 5px;
         }
 
         .nav-link {
             display: flex;
             align-items: center;
             padding: 15px 23px;
-            color: #8b949e;
+            color: var(--text-secondary);
             text-decoration: none;
-            transition: 0.2s;
+            transition: all 0.3s;
             white-space: nowrap;
+            position: relative;
         }
 
         .nav-link:hover {
-            background-color: #21262d;
-            color: var(--accent-color);
+            color: var(--accent);
+            background: rgba(0, 210, 255, 0.05);
         }
 
         .nav-link i {
@@ -107,7 +112,9 @@
         }
 
         .nav-link span {
-            margin-left: 15px;
+            margin-left: 20px;
+            font-size: 15px;
+            font-weight: 500;
             opacity: 0;
             transition: opacity 0.3s;
         }
@@ -116,55 +123,82 @@
             opacity: 1;
         }
 
-        /* CONTEÚDO PRINCIPAL (MAIN) */
-        .main-content {
-            margin-left: var(--sidebar-width-collapsed); /* Deixa espaço fixo para a barra pequena */
+        /* Indicador Ativo */
+        .nav-link.active {
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            background: rgba(0, 210, 255, 0.1);
+        }
+
+        /* CONTEÚDO PRINCIPAL (MAIN CONTENT) */
+        .main-wrapper {
+            margin-left: var(--sidebar-width-collapsed);
             flex-grow: 1;
-            padding: 30px;
-            transition: margin-left 0.3s ease;
+            padding: 40px;
+            transition: margin-left 0.4s ease;
             width: calc(100% - var(--sidebar-width-collapsed));
         }
 
-        /* Opcional: Empurrar o conteúdo quando a barra abrir */
-        .sidebar:hover ~ .main-content {
-            margin-left: var(--sidebar-width-full);
-            width: calc(100% - var(--sidebar-width-full));
+        .sidebar:hover ~ .main-wrapper {
+            margin-left: var(--sidebar-width-expanded);
+            width: calc(100% - var(--sidebar-width-expanded));
         }
 
-        /* Seus cards e outros elementos aqui embaixo */
-        .dashboard-header { margin-bottom: 30px; }
-        .stats-grid {
+        /* CARDS DO PROJETO */
+        .header-box {
+            margin-bottom: 40px;
+        }
+
+        .header-box h1 { font-size: 2.5rem; margin: 0; background: linear-gradient(to right, #fff, #8b949e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .dashboard-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
         }
-        .stat-card {
-            background: #21262d;
-            padding: 20px;
-            border-radius: 8px;
+
+        .nexu-card {
+            background: #161b22;
             border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 25px;
+            transition: transform 0.3s;
         }
+
+        .nexu-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+
+        .nexu-card h3 { color: var(--text-secondary); margin: 0; font-size: 14px; text-transform: uppercase; }
+        .nexu-card p { font-size: 32px; font-weight: bold; margin: 15px 0 0 0; color: var(--accent); }
+
+        .logout-area {
+            padding: 20px;
+            border-top: 1px solid #30363d;
+        }
+
     </style>
 </head>
 <body>
 
     <aside class="sidebar">
-        <div class="sidebar-header">
-            <i class="fas fa-layer-group"></i>
-            <span>NexaScore 3.0</span>
+        <div class="sidebar-brand">
+            <i class="fas fa-rocket"></i>
+            <span>NEXUSCORE</span>
         </div>
 
-        <ul class="nav-menu">
+        <ul class="sidebar-nav">
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="#" class="nav-link active">
                     <i class="fas fa-home"></i>
-                    <span>Início</span>
+                    <span>Dashboard</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="#" class="nav-link">
-                    <i class="fas fa-user-friends"></i>
-                    <span>Usuários</span>
+                    <i class="fas fa-chart-line"></i>
+                    <span>Analytics</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -175,49 +209,64 @@
             </li>
             <li class="nav-item">
                 <a href="#" class="nav-link">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Estatísticas</span>
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Segurança</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="#" class="nav-link">
                     <i class="fas fa-cog"></i>
-                    <span>Configurações</span>
+                    <span>Ajustes</span>
                 </a>
             </li>
         </ul>
 
-        <div class="nav-item" style="margin-top: auto; border-top: 1px solid #30363d;">
-            <a href="index.html" class="nav-link" style="color: #f85149;">
-                <i class="fas fa-sign-out-alt"></i>
+        <div class="logout-area">
+            <a href="index.html" class="nav-link" id="btnSair" style="color: #ff4b4b;">
+                <i class="fas fa-power-off"></i>
                 <span>Sair do Sistema</span>
             </a>
         </div>
     </aside>
 
-    <main class="main-content">
-        <div class="dashboard-header">
-            <h1>Painel de Controle</h1>
-            <p>Bem-vindo de volta! Aqui está tudo o que você tinha antes.</p>
+    <main class="main-wrapper">
+        <div class="header-box">
+            <h1>Bem-vindo, Operador</h1>
+            <p style="color: var(--text-secondary)">Sistema NexuScore 3.0 carregado com sucesso.</p>
         </div>
 
-        <div class="stats-grid">
-            <div class="stat-card">
-                <h4>Atividade</h4>
-                <p>100% Operacional</p>
+        <div class="dashboard-grid">
+            <div class="nexu-card">
+                <h3>Score Atual</h3>
+                <p>942.50</p>
             </div>
-            <div class="stat-card">
-                <h4>Servidor</h4>
-                <p>Cloud FireBase</p>
+            <div class="nexu-card">
+                <h3>Volume 24h</h3>
+                <p>R$ 48.290</p>
+            </div>
+            <div class="nexu-card">
+                <h3>Países</h3>
+                <p>12 Ativos</p>
             </div>
         </div>
     </main>
 
     <script type="module">
-        // Seu código do Firebase aqui para manter funcionando
         import { auth } from './firebase-config.js';
+
+        // Lógica de Proteção de Rota
         auth.onAuthStateChanged(user => {
-            if (!user) window.location.href = 'index.html';
+            if (!user) {
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Lógica do botão de Sair
+        document.getElementById('btnSair').addEventListener('click', (e) => {
+            e.preventDefault();
+            auth.signOut().then(() => {
+                window.location.href = 'index.html';
+            });
         });
     </script>
 </body>
