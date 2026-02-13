@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexuScore 3.0 - Dashboard Oficial</title>
+    <title>NexuScore 3.0 - Gestão Total</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
@@ -14,6 +14,7 @@
             --text-secondary: #8b949e;
             --sidebar-width-collapsed: 70px;
             --sidebar-width-expanded: 260px;
+            --card-bg: #161b22;
         }
 
         body {
@@ -23,9 +24,10 @@
             color: var(--text-primary);
             display: flex;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* SIDEBAR ACOPLADA */
+        /* SIDEBAR RETRÁTIL */
         .sidebar {
             width: var(--sidebar-width-collapsed);
             background-color: var(--sidebar-color);
@@ -37,19 +39,17 @@
             transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 1000;
             border-right: 1px solid #30363d;
-            overflow: hidden;
         }
 
         .sidebar:hover { width: var(--sidebar-width-expanded); }
 
         .sidebar-brand {
-            height: 80px;
+            height: 70px;
             display: flex;
             align-items: center;
             padding: 0 23px;
             color: var(--accent);
             font-weight: 800;
-            font-size: 20px;
             border-bottom: 1px solid #1f2937;
         }
 
@@ -62,12 +62,21 @@
 
         .sidebar:hover .sidebar-brand span { opacity: 1; }
 
-        .nav-list { flex-grow: 1; margin-top: 20px; }
+        .nav-list { 
+            flex-grow: 1; 
+            margin-top: 15px; 
+            overflow-y: auto; 
+            overflow-x: hidden;
+        }
+
+        /* Scrollbar customizada para a sidebar */
+        .nav-list::-webkit-scrollbar { width: 4px; }
+        .nav-list::-webkit-scrollbar-thumb { background: #30363d; }
 
         .nav-link {
             display: flex;
             align-items: center;
-            padding: 18px 25px;
+            padding: 14px 25px;
             color: var(--text-secondary);
             text-decoration: none;
             cursor: pointer;
@@ -76,11 +85,11 @@
 
         .nav-link:hover, .nav-link.active {
             color: var(--accent);
-            background: rgba(0, 210, 255, 0.05);
+            background: rgba(0, 210, 255, 0.08);
             border-left: 4px solid var(--accent);
         }
 
-        .nav-link i { min-width: 25px; font-size: 20px; text-align: center; }
+        .nav-link i { min-width: 25px; font-size: 18px; text-align: center; }
 
         .nav-link span {
             margin-left: 20px;
@@ -95,109 +104,134 @@
         .main-wrapper {
             margin-left: var(--sidebar-width-collapsed);
             flex-grow: 1;
-            padding: 40px;
+            padding: 30px;
             transition: margin-left 0.3s ease;
             width: 100%;
         }
 
         .sidebar:hover ~ .main-wrapper { margin-left: var(--sidebar-width-expanded); }
 
-        /* SEÇÕES DE CONTEÚDO */
-        .content-section { display: none; }
-        .content-section.active { display: block; animation: fadeIn 0.4s ease; }
+        /* SISTEMA DE SEÇÕES */
+        .content-section { display: none; max-width: 1200px; margin: 0 auto; }
+        .content-section.active { display: block; animation: fadeIn 0.4s ease forwards; }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* GRID DE CARDS ORIGINAIS */
+        /* ESTILIZAÇÃO DE CARDS E GRIDS */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
         }
 
         .card {
-            background: #161b22;
-            padding: 25px;
-            border-radius: 16px;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
             border: 1px solid #30363d;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            transition: transform 0.2s;
         }
 
-        .card:hover { transform: translateY(-5px); border-color: var(--accent); }
+        .card h3 { margin: 0; color: var(--text-secondary); font-size: 13px; text-transform: uppercase; }
+        .card .value { font-size: 28px; font-weight: bold; margin-top: 10px; display: block; color: var(--accent); }
 
-        .card h3 { margin: 0; color: var(--text-secondary); font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
-        .card .value { font-size: 32px; font-weight: bold; margin-top: 15px; display: block; color: var(--accent); }
+        .logout-btn {
+            padding: 20px 25px;
+            color: #f85149;
+            border-top: 1px solid #30363d;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
 
     <aside class="sidebar">
         <div class="sidebar-brand">
-            <i class="fas fa-rocket"></i> <span>NEXUSCORE 3.0</span>
+            <i class="fas fa-layer-group"></i> <span>NEXUSCORE 3.0</span>
         </div>
 
         <nav class="nav-list">
-            <div class="nav-link active" onclick="showSection('inicio')">
-                <i class="fas fa-th-large"></i> <span>Dashboard</span>
+            <div class="nav-link active" onclick="showSection('dashboard')">
+                <i class="fas fa-chart-pie"></i> <span>Dashboard</span>
             </div>
-            <div class="nav-link" onclick="showSection('analytics')">
-                <i class="fas fa-chart-line"></i> <span>Analytics</span>
+            <div class="nav-link" onclick="showSection('clientes')">
+                <i class="fas fa-users"></i> <span>Clientes</span>
+            </div>
+            <div class="nav-link" onclick="showSection('funcionarios')">
+                <i class="fas fa-user-tie"></i> <span>Funcionários</span>
+            </div>
+            <div class="nav-link" onclick="showSection('produtos')">
+                <i class="fas fa-box-open"></i> <span>Produtos</span>
+            </div>
+            <div class="nav-link" onclick="showSection('vendas')">
+                <i class="fas fa-shopping-cart"></i> <span>Vendas</span>
             </div>
             <div class="nav-link" onclick="showSection('financeiro')">
                 <i class="fas fa-wallet"></i> <span>Financeiro</span>
             </div>
-            <div class="nav-link" onclick="showSection('ajustes')">
-                <i class="fas fa-user-shield"></i> <span>Segurança</span>
+            <div class="nav-link" onclick="showSection('relatorios')">
+                <i class="fas fa-file-invoice-dollar"></i> <span>Relatórios</span>
+            </div>
+            <div class="nav-link" onclick="showSection('configuracoes')">
+                <i class="fas fa-cog"></i> <span>Configurações</span>
             </div>
         </nav>
 
-        <div class="nav-link" id="btnLogout" style="color: #ff4b4b; border-top: 1px solid #30363d; margin-top: auto;">
-            <i class="fas fa-sign-out-alt"></i> <span>Sair do Sistema</span>
+        <div class="logout-btn" id="btnLogout">
+            <i class="fas fa-sign-out-alt"></i> <span style="margin-left: 20px; font-weight: bold;">Sair</span>
         </div>
     </aside>
 
     <main class="main-wrapper">
         
-        <section id="inicio" class="content-section active">
-            <header>
-                <h1 id="welcomeText">Painel NexuScore 3.0</h1>
-                <p id="userEmail" style="color: var(--text-secondary)">Carregando informações do operador...</p>
-            </header>
-
+        <section id="dashboard" class="content-section active">
+            <h1>Painel Geral</h1>
             <div class="stats-grid">
-                <div class="card">
-                    <h3>Score de Desempenho</h3>
-                    <span class="value">942.50 XP</span>
-                </div>
-                <div class="card">
-                    <h3>País de Operação</h3>
-                    <span class="value" id="countryDisplay">Brasil</span>
-                </div>
-                <div class="card">
-                    <h3>Lucro Estimado</h3>
-                    <span class="value">R$ 12.450,00</span>
-                </div>
+                <div class="card"><h3>Vendas Hoje</h3><span class="value">R$ 4.250,00</span></div>
+                <div class="card"><h3>Novos Clientes</h3><span class="value">28</span></div>
+                <div class="card"><h3>Score Nexu</h3><span class="value">9.8</span></div>
             </div>
         </section>
 
-        <section id="analytics" class="content-section">
-            <h1>Analytics & Estatísticas</h1>
-            <div class="card"><p>Gráficos de performance e métricas em tempo real aparecerão aqui.</p></div>
+        <section id="clientes" class="content-section">
+            <h1>Gerenciamento de Clientes</h1>
+            <div class="card"><p>Lista de clientes e cadastro de novos contatos.</p></div>
+        </section>
+
+        <section id="funcionarios" class="content-section">
+            <h1>Equipe e Colaboradores</h1>
+            <div class="card"><p>Controle de acesso e desempenho da equipe.</p></div>
+        </section>
+
+        <section id="produtos" class="content-section">
+            <h1>Estoque de Produtos</h1>
+            <div class="card"><p>Gestão de inventário e preços.</p></div>
+        </section>
+
+        <section id="vendas" class="content-section">
+            <h1>Histórico de Vendas</h1>
+            <div class="card"><p>Acompanhamento de pedidos e entregas.</p></div>
         </section>
 
         <section id="financeiro" class="content-section">
-            <h1>Financeiro</h1>
-            <div class="card"><p>Histórico de saques, depósitos e saldo disponível.</p></div>
+            <h1>Fluxo de Caixa</h1>
+            <div class="card"><p>Contas a pagar e receber.</p></div>
         </section>
 
-        <section id="ajustes" class="content-section">
-            <h1>Segurança e Ajustes</h1>
-            <div class="card"><p>Configurações da conta, troca de senha e chaves de API.</p></div>
+        <section id="relatorios" class="content-section">
+            <h1>Relatórios Gerenciais</h1>
+            <div class="card"><p>Exportação de dados e análise mensal.</p></div>
+        </section>
+
+        <section id="configuracoes" class="content-section">
+            <h1>Configurações do Sistema</h1>
+            <div class="card"><p>Preferências, Segurança e API do Firebase.</p></div>
         </section>
 
     </main>
@@ -205,38 +239,23 @@
     <script type="module">
         import { auth } from './firebase-config.js';
 
-        // SISTEMA DE NAVEGAÇÃO ENTRE TELAS
+        // NAVEGAÇÃO ENTRE TODAS AS ABAS
         window.showSection = function(sectionId) {
-            // Esconde todas as seções
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-            // Remove o destaque de todos os botões
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
             
-            // Mostra a seção que você clicou
-            const targetSection = document.getElementById(sectionId);
-            if(targetSection) targetSection.classList.add('active');
-
-            // Marca o botão clicado como ativo (cor azul)
+            document.getElementById(sectionId).classList.add('active');
             event.currentTarget.classList.add('active');
         }
 
-        // VERIFICA SE ESTÁ LOGADO
+        // FIREBASE AUTH
         auth.onAuthStateChanged(user => {
-            if (user) {
-                document.getElementById('userEmail').innerText = `Operador: ${user.email}`;
-            } else {
-                window.location.href = 'index.html';
-            }
+            if (!user) window.location.href = 'index.html';
         });
 
-        // FUNÇÃO DE SAIR (LOGOUT)
-        document.getElementById('btnLogout').addEventListener('click', (e) => {
-            e.preventDefault();
-            auth.signOut().then(() => {
-                window.location.href = 'index.html';
-            });
+        document.getElementById('btnLogout').addEventListener('click', () => {
+            auth.signOut().then(() => window.location.href = 'index.html');
         });
     </script>
 </body>
-    </html>
-                    
+                </html>
