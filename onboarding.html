@@ -3,25 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexuScore - Configuração</title>
+    <title>NexuScore - Seleção de Região</title>
     <style>
-        body { margin: 0; padding: 0; font-family: sans-serif; background-color: #05070a; color: white; display: flex; align-items: center; justify-content: center; height: 100vh; }
-        .card { background: #0d1117; padding: 30px; border-radius: 12px; border: 1px solid #30363d; text-align: center; width: 300px; }
-        button { width: 100%; padding: 15px; margin-bottom: 10px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; color: white; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #05070a; color: white; display: flex; align-items: center; justify-content: center; height: 100vh; }
+        .card { background: #0d1117; padding: 40px; border-radius: 15px; border: 1px solid #30363d; text-align: center; width: 320px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h2 { font-size: 22px; margin-bottom: 10px; color: #00d2ff; }
+        p { color: #8b949e; font-size: 14px; margin-bottom: 30px; }
+        button { width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; color: white; display: block; }
         .btn-br { background: #22c55e; }
         .btn-us { background: #3b82f6; }
         .btn-eu { background: #f59e0b; }
-        button:hover { opacity: 0.8; transform: scale(1.02); }
+        button:hover { transform: translateY(-3px); filter: brightness(1.2); }
+        button:disabled { opacity: 0.3; cursor: not-allowed; }
     </style>
 </head>
 <body>
+
     <div class="card">
-        <h2>Selecione sua Região</h2>
-        <p style="color: #8b949e; font-size: 14px;">Escolha para configurar o sistema</p>
+        <h2 id="status">Carregando...</h2>
+        <p id="instrucao">Aguarde a conexão com o servidor.</p>
         
-        <button class="btn-br" onclick="window.salvarRegiao('Brasil', 'R$')">🇧🇷 BRASIL</button>
-        <button class="btn-us" onclick="window.salvarRegiao('USA', '$')">🇺🇸 USA</button>
-        <button class="btn-eu" onclick="window.salvarRegiao('Europa', '€')">🇪🇺 EUROPA</button>
+        <button id="br" class="btn-br" onclick="window.finalizar('Brasil', 'R$')" disabled>🇧🇷 BRASIL</button>
+        <button id="us" class="btn-us" onclick="window.finalizar('USA', '$')" disabled>🇺🇸 USA</button>
+        <button id="eu" class="btn-eu" onclick="window.finalizar('Europa', '€')" disabled>🇪🇺 EUROPA</button>
     </div>
 
     <script type="module">
@@ -29,37 +33,35 @@
         import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        window.salvarRegiao = async function(pais, moeda) {
-            const user = auth.currentUser;
-
-            if (!user) {
-                alert("Erro: Você não está logado!");
-                return;
+        // Verifica se o usuário está logado para liberar os botões
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById('status').innerText = "Região";
+                document.getElementById('instrucao').innerText = "Selecione sua localidade:";
+                document.querySelectorAll('button').forEach(b => b.disabled = false);
+            } else {
+                alert("Sessão expirada. Faça login novamente.");
+                window.location.href = 'index.html';
             }
+        });
+
+        window.finalizar = async function(pais, moeda) {
+            const user = auth.currentUser;
+            if (!user) return;
 
             try {
-                // SALVA NO FIREBASE (A coleção que você tem lá)
                 await setDoc(doc(db, "usuarios", user.uid), {
                     pais: pais,
                     moeda: moeda,
-                    configurado: true
+                    configurado: true,
+                    email: user.email
                 }, { merge: true });
 
-                alert("Configurado para " + pais);
                 window.location.href = 'dashboard.html';
-            } catch (e) {
-                alert("Erro ao salvar: " + e.message);
+            } catch (error) {
+                alert("Erro ao salvar: " + error.message);
             }
         };
-
-        // Garante que o Firebase reconhece o usuário ao carregar a página
-        onAuthStateChanged(auth, (user) => {
-            if (!user) {
-                console.log("Nenhum usuário logado.");
-            } else {
-                console.log("Usuário logado:", user.uid);
-            }
-        });
     </script>
 </body>
 </html>
