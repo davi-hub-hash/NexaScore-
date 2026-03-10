@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexuScore 3.0 - Dashboard Oficial</title>
+    <title>NexuScore 3.0 - Global</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
@@ -27,7 +27,7 @@
         .sidebar:hover .sidebar-brand span { opacity: 1; }
 
         .nav-list { flex-grow: 1; margin-top: 15px; overflow-y: auto; overflow-x: hidden; }
-        .nav-link { display: flex; align-items: center; padding: 14px 25px; color: var(--text-secondary); text-decoration: none; cursor: pointer; transition: 0.2s; }
+        .nav-link { display: flex; align-items: center; padding: 14px 25px; color: var(--text-secondary); text-decoration: none; cursor: pointer; transition: 0.2s; border-left: 4px solid transparent; }
         .nav-link:hover, .nav-link.active { color: var(--accent); background: rgba(0, 210, 255, 0.08); border-left: 4px solid var(--accent); }
         .nav-link i { min-width: 25px; font-size: 18px; text-align: center; }
         .nav-link span { margin-left: 20px; opacity: 0; transition: opacity 0.2s; white-space: nowrap; }
@@ -54,22 +54,22 @@
     <aside class="sidebar">
         <div class="sidebar-brand"><i class="fas fa-layer-group"></i> <span>NEXUSCORE 3.0</span></div>
         <nav class="nav-list">
-            <div class="nav-link active" onclick="showSection('dashboard')"><i class="fas fa-chart-pie"></i> <span>Dashboard</span></div>
-            <div class="nav-link" onclick="showSection('clientes')"><i class="fas fa-users"></i> <span>Clientes</span></div>
-            <div class="nav-link" onclick="showSection('funcionarios')"><i class="fas fa-user-tie"></i> <span>Funcionários</span></div>
-            <div class="nav-link" onclick="showSection('produtos')"><i class="fas fa-box-open"></i> <span>Produtos</span></div>
-            <div class="nav-link" onclick="showSection('vendas')"><i class="fas fa-shopping-cart"></i> <span>Vendas</span></div>
-            <div class="nav-link" onclick="showSection('financeiro')"><i class="fas fa-wallet"></i> <span>Financeiro</span></div>
-            <div class="nav-link" onclick="showSection('relatorios')"><i class="fas fa-file-invoice-dollar"></i> <span>Relatórios</span></div>
-            <div class="nav-link" onclick="showSection('configuracoes')"><i class="fas fa-cog"></i> <span>Configurações</span></div>
+            <div class="nav-link active" onclick="showSection('dashboard')"><i class="fas fa-chart-pie"></i> <span class="lang-aba1">Dashboard</span></div>
+            <div class="nav-link" onclick="showSection('clientes')"><i class="fas fa-users"></i> <span class="lang-aba2">Clientes</span></div>
+            <div class="nav-link" onclick="showSection('funcionarios')"><i class="fas fa-user-tie"></i> <span class="lang-aba3">Funcionários</span></div>
+            <div class="nav-link" onclick="showSection('produtos')"><i class="fas fa-box-open"></i> <span class="lang-aba4">Produtos</span></div>
+            <div class="nav-link" onclick="showSection('vendas')"><i class="fas fa-shopping-cart"></i> <span class="lang-aba5">Vendas</span></div>
+            <div class="nav-link" onclick="showSection('financeiro')"><i class="fas fa-wallet"></i> <span class="lang-aba6">Financeiro</span></div>
+            <div class="nav-link" onclick="showSection('relatorios')"><i class="fas fa-file-invoice-dollar"></i> <span class="lang-aba7">Relatórios</span></div>
+            <div class="nav-link" onclick="showSection('configuracoes')"><i class="fas fa-cog"></i> <span class="lang-aba8">Configurações</span></div>
         </nav>
-        <div class="logout-btn" id="btnLogout"><i class="fas fa-sign-out-alt"></i> <span style="margin-left: 20px;">Sair</span></div>
+        <div class="logout-btn" id="btnLogout"><i class="fas fa-sign-out-alt"></i> <span style="margin-left: 20px;" class="lang-logout">Sair</span></div>
     </aside>
 
     <main class="main-wrapper">
         <header>
-            <h1 id="txt-welcome">Carregando...</h1>
-            <p id="user-display" style="color: var(--text-secondary)">Região: <span id="countryDisplay">---</span></p>
+            <h1 id="txt-welcome">...</h1>
+            <p id="user-display" style="color: var(--text-secondary)"><span class="lang-region">Região</span>: <span id="countryDisplay">---</span></p>
         </header>
 
         <section id="dashboard" class="content-section active">
@@ -79,70 +79,87 @@
             </div>
         </section>
 
-        <section id="clientes" class="content-section"><h1>Gerenciar Clientes</h1><div class="card"><p>Conteúdo da aba clientes.</p></div></section>
-        <section id="funcionarios" class="content-section"><h1>Equipe Nexu</h1><div class="card"><p>Lista de funcionários.</p></div></section>
-        <section id="produtos" class="content-section"><h1>Estoque</h1></section>
-        <section id="vendas" class="content-section"><h1>Histórico</h1></section>
-        <section id="financeiro" class="content-section"><h1>Caixa</h1></section>
-        <section id="relatorios" class="content-section"><h1>Dados</h1></section>
-        <section id="configuracoes" class="content-section"><h1>Ajustes</h1></section>
+        <section id="clientes" class="content-section"><h1 class="lang-aba2">Clientes</h1></section>
+        <section id="funcionarios" class="content-section"><h1 class="lang-aba3">Funcionários</h1></section>
+        <section id="produtos" class="content-section"><h1 class="lang-aba4">Produtos</h1></section>
+        <section id="vendas" class="content-section"><h1 class="lang-aba5">Vendas</h1></section>
+        <section id="financeiro" class="content-section"><h1 class="lang-aba6">Financeiro</h1></section>
+        <section id="relatorios" class="content-section"><h1 class="lang-aba7">Relatórios</h1></section>
+        <section id="configuracoes" class="content-section"><h1 class="lang-aba8">Configurações</h1></section>
     </main>
 
     <script type="module">
         import { auth, db } from './firebase-config.js';
         import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // Funções de Tradução Rápida
-        const dicionario = {
-            'Brasil': { welcome: 'Bem-vindo ao NexuScore', vendas: 'Vendas Totais', saldo: 'Saldo em Caixa' },
-            'USA': { welcome: 'Welcome to NexuScore', vendas: 'Total Sales', saldo: 'Cash Balance' },
-            'Europa': { welcome: 'Bienvenue au NexuScore', vendas: 'Ventes Totales', saldo: 'Solde en Caisse' }
+        // DICIONÁRIO COMPLETO DE TRADUÇÃO
+        const traducoes = {
+            'Brasil': {
+                welcome: 'Bem-vindo ao NexuScore', region: 'Região', logout: 'Sair',
+                aba1: 'Painel', aba2: 'Clientes', aba3: 'Equipe', aba4: 'Produtos',
+                aba5: 'Vendas', aba6: 'Financeiro', aba7: 'Relatórios', aba8: 'Ajustes',
+                vendas: 'Vendas Totais', saldo: 'Saldo em Caixa'
+            },
+            'USA': {
+                welcome: 'Welcome to NexuScore', region: 'Region', logout: 'Logout',
+                aba1: 'Dashboard', aba2: 'Customers', aba3: 'Staff', aba4: 'Products',
+                aba5: 'Sales', aba6: 'Financial', aba7: 'Reports', aba8: 'Settings',
+                vendas: 'Total Sales', saldo: 'Cash Balance'
+            },
+            'Europa': {
+                welcome: 'Welcome to NexuScore (EU)', region: 'Region', logout: 'Logout',
+                aba1: 'Dashboard', aba2: 'Clients', aba3: 'Employees', aba4: 'Inventory',
+                aba5: 'Sales', aba6: 'Finance', aba7: 'Analytics', aba8: 'Settings',
+                vendas: 'Total Revenue', saldo: 'Available Funds'
+            }
         };
 
-        // 1. Monitora o Login e Busca Dados no Firestore
         auth.onAuthStateChanged(async (user) => {
             if (user) {
-                console.log("Usuário conectado:", user.uid);
-                
-                // Busca o documento do usuário na coleção 'usuarios'
                 const docRef = doc(db, "usuarios", user.uid);
                 const docSnap = await getDoc(docRef);
 
                 if (docSnap.exists()) {
                     const dados = docSnap.data();
-                    const pais = dados.pais || 'Brasil';
-                    const trad = dicionario[pais] || dicionario['Brasil'];
+                    const p = dados.pais || 'Brasil';
+                    const t = traducoes[p] || traducoes['Brasil'];
 
-                    // Aplica Idioma e Moeda
-                    document.getElementById('txt-welcome').innerText = trad.welcome;
-                    document.getElementById('lbl-vendas').innerText = trad.vendas;
-                    document.getElementById('lbl-saldo').innerText = trad.saldo;
-                    document.getElementById('countryDisplay').innerText = pais;
+                    // 1. Traduz Textos Principais
+                    document.getElementById('txt-welcome').innerText = t.welcome;
+                    document.getElementById('lbl-vendas').innerText = t.vendas;
+                    document.getElementById('lbl-saldo').innerText = t.saldo;
+                    document.getElementById('countryDisplay').innerText = p;
                     
+                    // 2. Traduz Menu Lateral (Abas)
+                    document.querySelector('.lang-aba1').innerText = t.aba1;
+                    document.querySelectorAll('.lang-aba2').forEach(el => el.innerText = t.aba2);
+                    document.querySelectorAll('.lang-aba3').forEach(el => el.innerText = t.aba3);
+                    document.querySelectorAll('.lang-aba4').forEach(el => el.innerText = t.aba4);
+                    document.querySelectorAll('.lang-aba5').forEach(el => el.innerText = t.aba5);
+                    document.querySelectorAll('.lang-aba6').forEach(el => el.innerText = t.aba6);
+                    document.querySelectorAll('.lang-aba7').forEach(el => el.innerText = t.aba7);
+                    document.querySelectorAll('.lang-aba8').forEach(el => el.innerText = t.aba8);
+                    document.querySelector('.lang-logout').innerText = t.logout;
+                    document.querySelector('.lang-region').innerText = t.region;
+
+                    // 3. Aplica a Moeda
                     document.querySelectorAll('.moeda').forEach(el => {
                         el.innerText = dados.moeda || 'R$';
                     });
-                } else {
-                    document.getElementById('txt-welcome').innerText = "Configure seu perfil no Firebase!";
                 }
-            } else {
-                window.location.href = 'index.html';
-            }
+            } else { window.location.href = 'index.html'; }
         });
 
-        // 2. Função para trocar de abas
-        window.showSection = function(sectionId) {
+        window.showSection = function(id) {
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            
-            document.getElementById(sectionId).classList.add('active');
+            document.getElementById(id).classList.add('active');
             event.currentTarget.classList.add('active');
         }
 
-        // 3. Botão Sair
         document.getElementById('btnLogout').addEventListener('click', () => {
             auth.signOut().then(() => window.location.href = 'index.html');
         });
     </script>
 </body>
-  </html>
+</html>
